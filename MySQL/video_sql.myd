@@ -1,0 +1,15 @@
+#날짜가 3달 전인 쿼리 결과 (같은 테이블 끼리 연결)
+
+SELECT * FROM views_trend as t1, 
+(SELECT profile_id, max(Date) as max_date FROM views_trend group by profile_id) as t2 
+WHERE t1.Date = t2.max_date and t1.profile_id = t2.profile_id and t1.profile_id in (SELECT distinct(t1.profile_id) FROM views_trend as t1, 
+(SELECT profile_id, DATE_SUB(max(Date),INTERVAL 3 MONTH ) as max_3_date FROM views_trend group by profile_id) as t2 
+WHERE t1.Date = t2.max_3_date and t1.profile_id = t2.profile_id);
+
+# 비디오의 좋아요/조회수 평균을 구독자 별로 조회 ( 테이블 2개 연결 )
+
+SELECT avg(uvi.video_likes/uvi.video_views) 
+FROM utuber_info as ui 
+LEFT JOIN utube_video_info as uvi 
+ON ui.profile_id = uvi.video_channelId 
+Where ui.profile_subscribers <50000 && ui.profile_subscribers > 10000;
