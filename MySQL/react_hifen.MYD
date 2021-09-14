@@ -1,0 +1,24 @@
+#SELECT *,avg(v_score) AS GROUP_V_SCORE FROM (
+SELECT *,avg(v_score) AS react,avg(average_vp) AS AVG_V_SCORE FROM
+(SELECT uvi.video_id,uvi.video_title,uvi.video_publishDate,ui.profile_subscribers,
+RANK() OVER(PARTITION BY uvi.video_channelId ORDER BY uvi.video_publishDate DESC) AS ranking,
+100*(uvi.video_likes + uvi.video_comments)/uvi.video_views AS v_score, (uvi.video_views/ui.profile_subscribers) AS average_vp, uvi.video_channelId 
+FROM hifen.utube_video_info AS uvi INNER JOIN hifen.utuber_info AS ui ON uvi.video_channelId = ui.profile_id) AS sub_query
+WHERE ranking <= 10 GROUP BY video_channelId HAVING profile_subscribers>10000 and profile_subscribers<=50000 ORDER BY profile_subscribers;#) AS sub_query2;
+
+
+SELECT *,avg(v_score) AS GROUP_V_SCORE FROM (
+SELECT *,avg(v_score) AS AVG_V_SCORE FROM
+(SELECT uvi.video_id,uvi.video_title,uvi.video_publishDate,ui.profile_subscribers,
+RANK() OVER(PARTITION BY uvi.video_channelId ORDER BY uvi.video_publishDate DESC) AS ranking,
+100*(uvi.video_likes + uvi.video_comments)/uvi.video_views AS v_score, uvi.video_channelId 
+FROM hifen.utube_video_info AS uvi INNER JOIN hifen.utuber_info AS ui ON uvi.video_channelId = ui.profile_id) AS sub_query
+WHERE ranking <= 10 GROUP BY video_channelId HAVING profile_subscribers>50000 and profile_subscribers<=100000 ORDER BY profile_subscribers) AS sub_query2;
+
+SELECT *,avg(v_score) AS GROUP_V_SCORE FROM (
+SELECT *,avg(v_score) AS AVG_V_SCORE FROM
+(SELECT uvi.video_id,uvi.video_title,uvi.video_publishDate,ui.profile_subscribers,
+RANK() OVER(PARTITION BY uvi.video_channelId ORDER BY uvi.video_publishDate DESC) AS ranking,
+100*(uvi.video_likes + uvi.video_comments)/uvi.video_views AS v_score, uvi.video_channelId 
+FROM hifen.utube_video_info AS uvi INNER JOIN hifen.utuber_info AS ui ON uvi.video_channelId = ui.profile_id) AS sub_query
+WHERE ranking <= 10 GROUP BY video_channelId HAVING profile_subscribers>100000 ORDER BY profile_subscribers) AS sub_query2;
