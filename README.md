@@ -1,2 +1,2 @@
 # git_sql
-PostgreSQL DB Tutorial
+MySQL DB Tutorial
