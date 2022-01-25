@@ -1,2 +1,2 @@
-# git_sql
+# SQL
 MySQL DB Tutorial
